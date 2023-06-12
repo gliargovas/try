@@ -8,6 +8,7 @@ on:
     branches:
       - main
       - future
+      - '*'
 # Jobs section
 jobs:
     LocalTests:
@@ -24,6 +25,9 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
       - name: Running Correctness Tests
         run: |
+          cd ..
+          cp -r try ~
+          cd ~/try
           uname -a
           sudo apt-get update
           sudo apt-get install strace
@@ -54,6 +58,7 @@ jobs:
       #         body: body,
       #       })     
       - name: Exit Code
+        working-directory: /home/runner/try/test
         run: |
           # check if everything executed without errors
-          cd test && bash exit_code.sh
+          bash exit_code.sh
